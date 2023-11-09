@@ -55,7 +55,7 @@ jobs:
                     </script>
                 </body>
             </html>
-            EOF
+          EOF
             done &&
             cp -R assets/ demo/$bevy_version/
           done
