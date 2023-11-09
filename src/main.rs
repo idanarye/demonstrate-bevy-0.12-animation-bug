@@ -4,7 +4,10 @@
 // Feel free to delete this line.
 #![allow(clippy::too_many_arguments, clippy::type_complexity)]
 
-use bevy::prelude::*;
+#[cfg(feature = "bevy11")]
+use bevy11::prelude::*;
+#[cfg(feature = "bevy12")]
+use bevy12::prelude::*;
 
 fn main() {
     App::new()

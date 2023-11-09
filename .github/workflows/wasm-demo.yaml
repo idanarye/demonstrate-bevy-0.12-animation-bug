@@ -32,29 +32,32 @@ jobs:
         run: |-
           cargo build --release --target wasm32-unknown-unknown
           mkdir demo
-          for demowasm in $(cd target/wasm32-unknown-unknown/release; ls *.wasm | grep -v -); do
-              wasm-bindgen target/wasm32-unknown-unknown/release/$demowasm --out-dir demo/ --target web
-              cat > demo/${demowasm%.*}.html <<EOF
-          <html lang="en-us">
-              <head>
-                  <script type="module">
-                      import init from './${demowasm%.*}.js';
-                      var res = await init();
-                      res.start();
-                  </script>
-              </head>
-              <body>
-                  <script>
-                      document.body.addEventListener("contextmenu", (e) => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                      });
-                  </script>
-              </body>
-          </html>
-          EOF
-          done &&
-          cp -R assets/ demo/
+          for bevy_version in bevy11 bevy12; do
+            mkdir demo/$bevy_version
+            for demowasm in $(cd target/wasm32-unknown-unknown/release; ls *.wasm | grep -v -); do
+                wasm-bindgen target/wasm32-unknown-unknown/release/$demowasm --out-dir demo/$bevy_version/ --target web
+                cat > demo/$bevy_version/${demowasm%.*}.html <<EOF
+            <html lang="en-us">
+                <head>
+                    <script type="module">
+                        import init from './${demowasm%.*}.js';
+                        var res = await init();
+                        res.start();
+                    </script>
+                </head>
+                <body>
+                    <script>
+                        document.body.addEventListener("contextmenu", (e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                        });
+                    </script>
+                </body>
+            </html>
+            EOF
+            done &&
+            cp -R assets/ demo/$bevy_version/
+          done
       - name: Add read permissions
         run: |-
           chmod --recursive +r demo

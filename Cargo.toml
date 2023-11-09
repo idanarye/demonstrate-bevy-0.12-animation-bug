@@ -16,4 +16,5 @@ opt-level = 1
 opt-level = 3
 
 [dependencies]
-bevy = "0.12"
+bevy11 = { package = "bevy", version = "0.11", optional = true }
+bevy12 = { package = "bevy", version = "0.12", optional = true }
