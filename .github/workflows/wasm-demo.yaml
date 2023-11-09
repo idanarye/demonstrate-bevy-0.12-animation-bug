@@ -30,9 +30,10 @@ jobs:
           GITHUB_REPO: ${{ github.repository }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |-
-          cargo build --release --target wasm32-unknown-unknown
           mkdir demo
           for bevy_version in bevy11 bevy12; do
+            cargo clean
+            cargo build --release --target wasm32-unknown-unknown --features $bevy_version
             mkdir demo/$bevy_version
             for demowasm in $(cd target/wasm32-unknown-unknown/release; ls *.wasm | grep -v -); do
                 wasm-bindgen target/wasm32-unknown-unknown/release/$demowasm --out-dir demo/$bevy_version/ --target web
